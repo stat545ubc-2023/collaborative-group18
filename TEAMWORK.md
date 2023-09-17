@@ -1,4 +1,4 @@
-#Contract of Teamwork
-##Division of Labour
-##Timing
-##Communication
+# Contract of Teamwork
+## Division of Labour
+## Timing
+## Communication
