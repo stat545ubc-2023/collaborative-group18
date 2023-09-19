@@ -1,7 +1,7 @@
 ## What is this project?
-This project is the first collaborative project for STAT 545A titled "Milestone 1". 
+This project is the first collaborative project for STAT 545A titled "Milestone 1". This project aims to teach us how to collaborate on a project through GitHub. 
 ## What files are in the project folder / GitHub repository at a high level?
-This project contains a "TEAMWORK" document with our team contract and includes information about the division of labour, the timeline for our project, and how we plan to communicate with each other. It also contains a "Troubleshooting" document used to complete Exercise 6 of Milestone 1. 
+This project contains a "TEAMWORK" document with our team contract and includes information about the division of labour, the timeline for our project, and how we plan to communicate with each other. It also contains two "Troubleshooting" documents used to complete Exercise 6 of Milestone 1. "Troubleshooting.rmd" is the R Markdown version of the "Troubleshooting.md" file which initially contained three errors that have now been fixed. 
 ## How can they run code that appears in your folder / GitHub repository? 
 Having _[git](https://git-scm.com)_, _[R](https://www.r-project.org)_, _[R Studio](https://posit.co/download/rstudio-desktop/)_ installed and a little experience in _terminal_ should suffice for cloning our repository and running the codes provided.
 
