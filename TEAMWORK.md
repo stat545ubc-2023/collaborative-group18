@@ -24,12 +24,14 @@ This part outlines the timelines each team member should aim for when submitting
 
 ## Communication
 
--   All the group members are Slack and GitHub Issues for communication.
--   **Slack**: Mainly for daily class issues, meetings on the proper channel. Normally the respond time should be **within 1 day**.
+-   All the group members are using Slack and GitHub Issues for communication.
+-   **Slack**: Mainly for daily class issues, meetings arrangements. Normally the respond time should be **within 1 day**.
 -   **Github**: Focus more on the technical problems for the milestone/assignments/worksheets. Normally the respond time should be **within 1 day**.
--   If any of the members has a technical problem then we could schedule a meeting.
+-   **Pull Request Information**: Clearly describe what your pull request does, the changes made, and tag any issues it resolves.
+-   If any team member encounters technical problems that cannot be resolved through regular communication channels, we will schedule an ad-hoc meeting to discuss and troubleshoot the issue as a team.
 -   We will also have **a weekly meeting** starting from 2 weeks before the due date of each milestone.
 
 ## Timelines
 
--   Milestone 1: Due Date for Pull Requests: Due Friday, September 22, 2023 at 17:00
+-   [Milestone 1](https://stat545.stat.ubc.ca/collaborative-project/milestone1/): Due **Friday, September 22, 2023 at 17:00 PT**.
+-   [Milestone 2](https://stat545.stat.ubc.ca/collaborative-project/milestone2/): Due **Friday, September 29, 2023 at 17:00 PT**.
