@@ -25,40 +25,34 @@ required packages.
 
 ``` r
 ### ERROR HERE ###
-load.packages(dslabs)
+library(dslabs)
+library(tidyverse)
 ```
 
-    ## Error in load.packages(dslabs): could not find function "load.packages"
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.3     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+    ## ✔ ggplot2   3.4.3     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.2     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
 ``` r
-load.packages(tidyverse)
+library(stringr)
+# library("devtools") # Do not run this if you already have this package installed! 
+# devtools::install_github("JoeyBernhardt/singer")
+library(gapminder)
 ```
 
-    ## Error in load.packages(tidyverse): could not find function "load.packages"
-
-``` r
-load.packages(stringr)
-```
-
-    ## Error in load.packages(stringr): could not find function "load.packages"
-
-``` r
-install.packages("devtools") # Do not run this if you already have this package installed! 
-```
-
-    ## Error in contrib.url(repos, "source"): trying to use CRAN without setting a mirror
-
-``` r
-devtools::install_github("JoeyBernhardt/singer")
-```
-
-    ## Error in loadNamespace(x): there is no package called 'devtools'
-
-``` r
-load.packages(gapminder)
-```
-
-    ## Error in load.packages(gapminder): could not find function "load.packages"
+    ## 
+    ## Attaching package: 'gapminder'
+    ## 
+    ## The following object is masked from 'package:dslabs':
+    ## 
+    ##     gapminder
 
 Let’s have a look at the dataset! My goal is to:
 
@@ -76,15 +70,18 @@ class(dslabs::movielens)
 
 ``` r
 movieLens <- as_tibble(dslabs::movielens)
+head(movieLens)
 ```
 
-    ## Error in as_tibble(dslabs::movielens): could not find function "as_tibble"
-
-``` r
-dim(movieLens)
-```
-
-    ## Error in eval(expr, envir, enclos): object 'movieLens' not found
+    ## # A tibble: 6 × 7
+    ##   movieId title                              year genres userId rating timestamp
+    ##     <int> <chr>                             <int> <fct>   <int>  <dbl>     <int>
+    ## 1      31 Dangerous Minds                    1995 Drama       1    2.5    1.26e9
+    ## 2    1029 Dumbo                              1941 Anima…      1    3      1.26e9
+    ## 3    1061 Sleepers                           1996 Thril…      1    3      1.26e9
+    ## 4    1129 Escape from New York               1981 Actio…      1    2      1.26e9
+    ## 5    1172 Cinema Paradiso (Nuovo cinema Pa…  1989 Drama       1    4      1.26e9
+    ## 6    1263 Deer Hunter, The                   1978 Drama…      1    2      1.26e9
 
 Now that we’ve had a quick look at the dataset, it would be interesting
 to explore the rows (observations) in some more detail. I’d like to
@@ -101,31 +98,96 @@ consider the movie entries that…
 filter(movieLens, genres == "Drama")
 ```
 
-    ## Error in eval(expr, envir, enclos): object 'movieLens' not found
+    ## # A tibble: 7,757 × 7
+    ##    movieId title                             year genres userId rating timestamp
+    ##      <int> <chr>                            <int> <fct>   <int>  <dbl>     <int>
+    ##  1      31 Dangerous Minds                   1995 Drama       1    2.5    1.26e9
+    ##  2    1172 Cinema Paradiso (Nuovo cinema P…  1989 Drama       1    4      1.26e9
+    ##  3    1293 Gandhi                            1982 Drama       1    2      1.26e9
+    ##  4      62 Mr. Holland's Opus                1995 Drama       2    3      8.35e8
+    ##  5     261 Little Women                      1994 Drama       2    4      8.35e8
+    ##  6     300 Quiz Show                         1994 Drama       2    3      8.35e8
+    ##  7     508 Philadelphia                      1993 Drama       2    4      8.35e8
+    ##  8     537 Sirens                            1994 Drama       2    4      8.35e8
+    ##  9    2702 Summer of Sam                     1999 Drama       3    3.5    1.30e9
+    ## 10    3949 Requiem for a Dream               2000 Drama       3    5      1.30e9
+    ## # ℹ 7,747 more rows
 
 ``` r
 filter(movieLens, !genres == "Drama")
 ```
 
-    ## Error in eval(expr, envir, enclos): object 'movieLens' not found
+    ## # A tibble: 92,247 × 7
+    ##    movieId title                            year genres  userId rating timestamp
+    ##      <int> <chr>                           <int> <fct>    <int>  <dbl>     <int>
+    ##  1    1029 Dumbo                            1941 Animat…      1    3      1.26e9
+    ##  2    1061 Sleepers                         1996 Thrill…      1    3      1.26e9
+    ##  3    1129 Escape from New York             1981 Action…      1    2      1.26e9
+    ##  4    1263 Deer Hunter, The                 1978 Drama|…      1    2      1.26e9
+    ##  5    1287 Ben-Hur                          1959 Action…      1    2      1.26e9
+    ##  6    1339 Dracula (Bram Stoker's Dracula)  1992 Fantas…      1    3.5    1.26e9
+    ##  7    1343 Cape Fear                        1991 Thrill…      1    2      1.26e9
+    ##  8    1371 Star Trek: The Motion Picture    1979 Advent…      1    2.5    1.26e9
+    ##  9    1405 Beavis and Butt-Head Do America  1996 Advent…      1    1      1.26e9
+    ## 10    1953 French Connection, The           1971 Action…      1    4      1.26e9
+    ## # ℹ 92,237 more rows
 
 ``` r
-filter(movieLens, year >= 2000)
+filter(movieLens, year > 2000)
 ```
 
-    ## Error in eval(expr, envir, enclos): object 'movieLens' not found
+    ## # A tibble: 25,481 × 7
+    ##    movieId title                             year genres userId rating timestamp
+    ##      <int> <chr>                            <int> <fct>   <int>  <dbl>     <int>
+    ##  1    5349 Spider-Man                        2002 Actio…      3    3      1.30e9
+    ##  2    5669 Bowling for Columbine             2002 Docum…      3    3.5    1.30e9
+    ##  3    6377 Finding Nemo                      2003 Adven…      3    3      1.30e9
+    ##  4    7153 Lord of the Rings: The Return o…  2003 Actio…      3    2.5    1.30e9
+    ##  5    7361 Eternal Sunshine of the Spotles…  2004 Drama…      3    3      1.30e9
+    ##  6    8622 Fahrenheit 9/11                   2004 Docum…      3    3.5    1.30e9
+    ##  7    8636 Spider-Man 2                      2004 Actio…      3    3      1.30e9
+    ##  8   44191 V for Vendetta                    2006 Actio…      3    3.5    1.30e9
+    ##  9   48783 Flags of Our Fathers              2006 Drama…      3    4.5    1.30e9
+    ## 10   50068 Letters from Iwo Jima             2006 Drama…      3    4.5    1.30e9
+    ## # ℹ 25,471 more rows
 
 ``` r
-filter(movieLens, year == 1999 | month == 2000)
+filter(movieLens, year == 1999 | year == 2000)
 ```
 
-    ## Error in eval(expr, envir, enclos): object 'movieLens' not found
+    ## # A tibble: 9,088 × 7
+    ##    movieId title                             year genres userId rating timestamp
+    ##      <int> <chr>                            <int> <fct>   <int>  <dbl>     <int>
+    ##  1    2694 Big Daddy                         1999 Comedy      3    3      1.30e9
+    ##  2    2702 Summer of Sam                     1999 Drama       3    3.5    1.30e9
+    ##  3    2762 Sixth Sense, The                  1999 Drama…      3    3.5    1.30e9
+    ##  4    2841 Stir of Echoes                    1999 Horro…      3    4      1.30e9
+    ##  5    2858 American Beauty                   1999 Drama…      3    4      1.30e9
+    ##  6    2959 Fight Club                        1999 Actio…      3    5      1.30e9
+    ##  7    3510 Frequency                         2000 Drama…      3    4      1.30e9
+    ##  8    3949 Requiem for a Dream               2000 Drama       3    5      1.30e9
+    ##  9   27369 Daria: Is It Fall Yet?            2000 Anima…      3    3.5    1.30e9
+    ## 10    2628 Star Wars: Episode I - The Phan…  1999 Actio…      4    5      9.50e8
+    ## # ℹ 9,078 more rows
 
 ``` r
 filter(movieLens, rating > 4.5, year < 1995)
 ```
 
-    ## Error in eval(expr, envir, enclos): object 'year' not found
+    ## # A tibble: 8,386 × 7
+    ##    movieId title                             year genres userId rating timestamp
+    ##      <int> <chr>                            <int> <fct>   <int>  <dbl>     <int>
+    ##  1     265 Like Water for Chocolate (Como …  1992 Drama…      2      5    8.35e8
+    ##  2     266 Legends of the Fall               1994 Drama…      2      5    8.35e8
+    ##  3     551 Nightmare Before Christmas, The   1993 Anima…      2      5    8.35e8
+    ##  4     589 Terminator 2: Judgment Day        1991 Actio…      2      5    8.35e8
+    ##  5     590 Dances with Wolves                1990 Adven…      2      5    8.35e8
+    ##  6     592 Batman                            1989 Actio…      2      5    8.35e8
+    ##  7     318 Shawshank Redemption, The         1994 Crime…      3      5    1.30e9
+    ##  8     356 Forrest Gump                      1994 Comed…      3      5    1.30e9
+    ##  9    1197 Princess Bride, The               1987 Actio…      3      5    1.30e9
+    ## 10     260 Star Wars: Episode IV - A New H…  1977 Actio…      4      5    9.50e8
+    ## # ℹ 8,376 more rows
 
 While filtering for *all movies that do not belong to the genre drama*
 above, I noticed something interesting. I want to filter for the same
@@ -139,10 +201,23 @@ there is a function to select “everything else”…
 ### ERROR HERE ###
 movieLens %>%
   filter(!genres == "Drama") %>%
-  select(title, genres, year, rating, timestamp)
+  select(title, genres,everything())
 ```
 
-    ## Error in movieLens %>% filter(!genres == "Drama") %>% select(title, genres, : could not find function "%>%"
+    ## # A tibble: 92,247 × 7
+    ##    title                           genres  movieId  year userId rating timestamp
+    ##    <chr>                           <fct>     <int> <int>  <int>  <dbl>     <int>
+    ##  1 Dumbo                           Animat…    1029  1941      1    3      1.26e9
+    ##  2 Sleepers                        Thrill…    1061  1996      1    3      1.26e9
+    ##  3 Escape from New York            Action…    1129  1981      1    2      1.26e9
+    ##  4 Deer Hunter, The                Drama|…    1263  1978      1    2      1.26e9
+    ##  5 Ben-Hur                         Action…    1287  1959      1    2      1.26e9
+    ##  6 Dracula (Bram Stoker's Dracula) Fantas…    1339  1992      1    3.5    1.26e9
+    ##  7 Cape Fear                       Thrill…    1343  1991      1    2      1.26e9
+    ##  8 Star Trek: The Motion Picture   Advent…    1371  1979      1    2.5    1.26e9
+    ##  9 Beavis and Butt-Head Do America Advent…    1405  1996      1    1      1.26e9
+    ## 10 French Connection, The          Action…    1953  1971      1    4      1.26e9
+    ## # ℹ 92,237 more rows
 
 ## Exercise 2: Calculating with `mutate()`-like functions
 
@@ -158,7 +233,10 @@ movieLens <- movieLens %>%
          movie_id == movieId)
 ```
 
-    ## Error in movieLens %>% rename(user_id == userId, movie_id == movieId): could not find function "%>%"
+    ## Error in `rename()`:
+    ## ! Problem while evaluating `user_id == userId`.
+    ## Caused by error:
+    ## ! object 'user_id' not found
 
 As you already know, `mutate()` defines and inserts new variables into a
 tibble. There is *another mystery function similar to `mutate()`* that
@@ -173,7 +251,20 @@ mutate(movieLens,
        average_rating = mean(rating))
 ```
 
-    ## Error in mutate(movieLens, average_rating = mean(rating)): could not find function "mutate"
+    ## # A tibble: 100,004 × 8
+    ##    movieId title              year genres userId rating timestamp average_rating
+    ##      <int> <chr>             <int> <fct>   <int>  <dbl>     <int>          <dbl>
+    ##  1      31 Dangerous Minds    1995 Drama       1    2.5    1.26e9           3.54
+    ##  2    1029 Dumbo              1941 Anima…      1    3      1.26e9           3.54
+    ##  3    1061 Sleepers           1996 Thril…      1    3      1.26e9           3.54
+    ##  4    1129 Escape from New …  1981 Actio…      1    2      1.26e9           3.54
+    ##  5    1172 Cinema Paradiso …  1989 Drama       1    4      1.26e9           3.54
+    ##  6    1263 Deer Hunter, The   1978 Drama…      1    2      1.26e9           3.54
+    ##  7    1287 Ben-Hur            1959 Actio…      1    2      1.26e9           3.54
+    ##  8    1293 Gandhi             1982 Drama       1    2      1.26e9           3.54
+    ##  9    1339 Dracula (Bram St…  1992 Fanta…      1    3.5    1.26e9           3.54
+    ## 10    1343 Cape Fear          1991 Thril…      1    2      1.26e9           3.54
+    ## # ℹ 99,994 more rows
 
 ## Exercise 3: Calculating with `summarise()`-like functions
 
@@ -192,7 +283,20 @@ movieLens %>%
   tally()
 ```
 
-    ## Error in movieLens %>% group_by(title) %>% tally(): could not find function "%>%"
+    ## # A tibble: 8,832 × 2
+    ##    title                                  n
+    ##    <chr>                              <int>
+    ##  1 "\"Great Performances\" Cats"          2
+    ##  2 "$9.99"                                3
+    ##  3 "'Hellboy': The Seeds of Creation"     1
+    ##  4 "'Neath the Arizona Skies"             1
+    ##  5 "'Round Midnight"                      2
+    ##  6 "'Salem's Lot"                         1
+    ##  7 "'Til There Was You"                   4
+    ##  8 "'burbs, The"                         19
+    ##  9 "'night Mother"                        3
+    ## 10 "(500) Days of Summer"                45
+    ## # ℹ 8,822 more rows
 
 Without using `group_by()`, I want to find out how many movie reviews
 there have been for each year.
@@ -203,7 +307,10 @@ movieLens %>%
   tally(year)
 ```
 
-    ## Error in movieLens %>% tally(year): could not find function "%>%"
+    ## # A tibble: 1 × 1
+    ##           n
+    ##       <int>
+    ## 1 199176755
 
 Both `count()` and `tally()` can be grouped by multiple columns. Below,
 I want to count the number of movie reviews by title and rating, and
@@ -215,7 +322,10 @@ movieLens %>%
   count(c(title, rating), sort = TRUE)
 ```
 
-    ## Error in movieLens %>% count(c(title, rating), sort = TRUE): could not find function "%>%"
+    ## Error in `count()`:
+    ## ℹ In argument: `c(title, rating)`.
+    ## Caused by error:
+    ## ! `c(title, rating)` must be size 100004 or 1, not 200008.
 
 Not only do `count()` and `tally()` quickly allow you to count items
 within your dataset, `add_tally()` and `add_count()` are handy shortcuts
@@ -233,7 +343,20 @@ movieLens %>%
   summarize(avg_rating = mean(rating))
 ```
 
-    ## Error in movieLens %>% group_by(year) %>% summarize(avg_rating = mean(rating)): could not find function "%>%"
+    ## # A tibble: 104 × 2
+    ##     year avg_rating
+    ##    <int>      <dbl>
+    ##  1  1902       4.33
+    ##  2  1915       3   
+    ##  3  1916       3.5 
+    ##  4  1917       4.25
+    ##  5  1918       4.25
+    ##  6  1919       3   
+    ##  7  1920       3.7 
+    ##  8  1921       4.42
+    ##  9  1922       3.80
+    ## 10  1923       4.17
+    ## # ℹ 94 more rows
 
 Using `summarize()`, we can find the minimum and the maximum rating by
 title, stored under columns named `min_rating`, and `max_rating`,
@@ -246,7 +369,20 @@ movieLens %>%
          max_rating = max(rating))
 ```
 
-    ## Error in movieLens %>% mutate(min_rating = min(rating), max_rating = max(rating)): could not find function "%>%"
+    ## # A tibble: 100,004 × 9
+    ##    movieId title       year genres userId rating timestamp min_rating max_rating
+    ##      <int> <chr>      <int> <fct>   <int>  <dbl>     <int>      <dbl>      <dbl>
+    ##  1      31 Dangerous…  1995 Drama       1    2.5    1.26e9        0.5          5
+    ##  2    1029 Dumbo       1941 Anima…      1    3      1.26e9        0.5          5
+    ##  3    1061 Sleepers    1996 Thril…      1    3      1.26e9        0.5          5
+    ##  4    1129 Escape fr…  1981 Actio…      1    2      1.26e9        0.5          5
+    ##  5    1172 Cinema Pa…  1989 Drama       1    4      1.26e9        0.5          5
+    ##  6    1263 Deer Hunt…  1978 Drama…      1    2      1.26e9        0.5          5
+    ##  7    1287 Ben-Hur     1959 Actio…      1    2      1.26e9        0.5          5
+    ##  8    1293 Gandhi      1982 Drama       1    2      1.26e9        0.5          5
+    ##  9    1339 Dracula (…  1992 Fanta…      1    3.5    1.26e9        0.5          5
+    ## 10    1343 Cape Fear   1991 Thril…      1    2      1.26e9        0.5          5
+    ## # ℹ 99,994 more rows
 
 ## Exercise 5: Scoped variants with `across()`
 
@@ -260,8 +396,6 @@ into a tibble and store it under the variable `starWars`.
 starWars <- as_tibble(starwars)
 ```
 
-    ## Error in as_tibble(starwars): could not find function "as_tibble"
-
 We can find the mean for all columns that are numeric, ignoring the
 missing values:
 
@@ -270,7 +404,10 @@ starWars %>%
   summarise(across(where(is.numeric), function(x) mean(x, na.rm=TRUE)))
 ```
 
-    ## Error in starWars %>% summarise(across(where(is.numeric), function(x) mean(x, : could not find function "%>%"
+    ## # A tibble: 1 × 3
+    ##   height  mass birth_year
+    ##    <dbl> <dbl>      <dbl>
+    ## 1   174.  97.3       87.6
 
 We can find the minimum height and mass within each species, ignoring
 the missing values:
@@ -282,7 +419,12 @@ starWars %>%
   summarise(across("height", "mass", function(x) min(x, na.rm=TRUE)))
 ```
 
-    ## Error in starWars %>% group_by(species) %>% summarise(across("height", : could not find function "%>%"
+    ## Error in `summarise()`:
+    ## ℹ In argument: `across("height", "mass", function(x) min(x, na.rm =
+    ##   TRUE))`.
+    ## ℹ In group 1: `species = "Aleena"`.
+    ## Caused by error in `across()`:
+    ## ! `.fns` must be a function, a formula, or a list of functions/formulas.
 
 Note that here R has taken the convention that the minimum value of a
 set of `NA`s is `Inf`.
