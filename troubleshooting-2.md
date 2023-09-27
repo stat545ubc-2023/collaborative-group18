@@ -229,14 +229,9 @@ use *snake_case* instead, and assign our post-rename object back to
 ``` r
 ### ERROR HERE ###
 movieLens <- movieLens %>%
-  rename(user_id == userId,
-         movie_id == movieId)
+  rename(user_id = userId,
+         movie_id = movieId)
 ```
-
-    ## Error in `rename()`:
-    ## ! Problem while evaluating `user_id == userId`.
-    ## Caused by error:
-    ## ! object 'user_id' not found
 
 As you already know, `mutate()` defines and inserts new variables into a
 tibble. There is *another mystery function similar to `mutate()`* that
@@ -247,24 +242,14 @@ I forgot what that mystery function is. Can you remember?
 
 ``` r
 ### ERROR HERE ### 
-mutate(movieLens,
+summarise(movieLens,
        average_rating = mean(rating))
 ```
 
-    ## # A tibble: 100,004 × 8
-    ##    movieId title              year genres userId rating timestamp average_rating
-    ##      <int> <chr>             <int> <fct>   <int>  <dbl>     <int>          <dbl>
-    ##  1      31 Dangerous Minds    1995 Drama       1    2.5    1.26e9           3.54
-    ##  2    1029 Dumbo              1941 Anima…      1    3      1.26e9           3.54
-    ##  3    1061 Sleepers           1996 Thril…      1    3      1.26e9           3.54
-    ##  4    1129 Escape from New …  1981 Actio…      1    2      1.26e9           3.54
-    ##  5    1172 Cinema Paradiso …  1989 Drama       1    4      1.26e9           3.54
-    ##  6    1263 Deer Hunter, The   1978 Drama…      1    2      1.26e9           3.54
-    ##  7    1287 Ben-Hur            1959 Actio…      1    2      1.26e9           3.54
-    ##  8    1293 Gandhi             1982 Drama       1    2      1.26e9           3.54
-    ##  9    1339 Dracula (Bram St…  1992 Fanta…      1    3.5    1.26e9           3.54
-    ## 10    1343 Cape Fear          1991 Thril…      1    2      1.26e9           3.54
-    ## # ℹ 99,994 more rows
+    ## # A tibble: 1 × 1
+    ##   average_rating
+    ##            <dbl>
+    ## 1           3.54
 
 ## Exercise 3: Calculating with `summarise()`-like functions
 
@@ -304,13 +289,23 @@ there have been for each year.
 ``` r
 ### ERROR HERE ###
 movieLens %>%
-  tally(year)
+  count(year)
 ```
 
-    ## # A tibble: 1 × 1
-    ##           n
-    ##       <int>
-    ## 1 199176755
+    ## # A tibble: 104 × 2
+    ##     year     n
+    ##    <int> <int>
+    ##  1  1902     6
+    ##  2  1915     2
+    ##  3  1916     1
+    ##  4  1917     2
+    ##  5  1918     2
+    ##  6  1919     1
+    ##  7  1920    15
+    ##  8  1921    12
+    ##  9  1922    28
+    ## 10  1923     3
+    ## # ℹ 94 more rows
 
 Both `count()` and `tally()` can be grouped by multiple columns. Below,
 I want to count the number of movie reviews by title and rating, and
@@ -318,14 +313,31 @@ sort the results.
 
 ``` r
 ### ERROR HERE ###
+# either one works fine
 movieLens %>%
-  count(c(title, rating), sort = TRUE)
+  count(title, rating, sort = TRUE)
 ```
 
-    ## Error in `count()`:
-    ## ℹ In argument: `c(title, rating)`.
-    ## Caused by error:
-    ## ! `c(title, rating)` must be size 100004 or 1, not 200008.
+    ## # A tibble: 28,297 × 3
+    ##    title                              rating     n
+    ##    <chr>                               <dbl> <int>
+    ##  1 Shawshank Redemption, The               5   170
+    ##  2 Pulp Fiction                            5   138
+    ##  3 Star Wars: Episode IV - A New Hope      5   122
+    ##  4 Forrest Gump                            4   113
+    ##  5 Schindler's List                        5   109
+    ##  6 Godfather, The                          5   107
+    ##  7 Forrest Gump                            5   102
+    ##  8 Silence of the Lambs, The               4   102
+    ##  9 Fargo                                   5   100
+    ## 10 Silence of the Lambs, The               5   100
+    ## # ℹ 28,287 more rows
+
+``` r
+#movieLens %>%
+  #group_by( title, rating) %>%
+  #count(sort = TRUE)
+```
 
 Not only do `count()` and `tally()` quickly allow you to count items
 within your dataset, `add_tally()` and `add_count()` are handy shortcuts
@@ -365,24 +377,25 @@ respectively.
 ``` r
 ### ERROR HERE ###
 movieLens %>%
-  mutate(min_rating = min(rating), 
+  group_by(title) %>%
+  summarise(min_rating = min(rating), 
          max_rating = max(rating))
 ```
 
-    ## # A tibble: 100,004 × 9
-    ##    movieId title       year genres userId rating timestamp min_rating max_rating
-    ##      <int> <chr>      <int> <fct>   <int>  <dbl>     <int>      <dbl>      <dbl>
-    ##  1      31 Dangerous…  1995 Drama       1    2.5    1.26e9        0.5          5
-    ##  2    1029 Dumbo       1941 Anima…      1    3      1.26e9        0.5          5
-    ##  3    1061 Sleepers    1996 Thril…      1    3      1.26e9        0.5          5
-    ##  4    1129 Escape fr…  1981 Actio…      1    2      1.26e9        0.5          5
-    ##  5    1172 Cinema Pa…  1989 Drama       1    4      1.26e9        0.5          5
-    ##  6    1263 Deer Hunt…  1978 Drama…      1    2      1.26e9        0.5          5
-    ##  7    1287 Ben-Hur     1959 Actio…      1    2      1.26e9        0.5          5
-    ##  8    1293 Gandhi      1982 Drama       1    2      1.26e9        0.5          5
-    ##  9    1339 Dracula (…  1992 Fanta…      1    3.5    1.26e9        0.5          5
-    ## 10    1343 Cape Fear   1991 Thril…      1    2      1.26e9        0.5          5
-    ## # ℹ 99,994 more rows
+    ## # A tibble: 8,832 × 3
+    ##    title                              min_rating max_rating
+    ##    <chr>                                   <dbl>      <dbl>
+    ##  1 "\"Great Performances\" Cats"             0.5        3  
+    ##  2 "$9.99"                                   2.5        4.5
+    ##  3 "'Hellboy': The Seeds of Creation"        2          2  
+    ##  4 "'Neath the Arizona Skies"                0.5        0.5
+    ##  5 "'Round Midnight"                         0.5        4  
+    ##  6 "'Salem's Lot"                            3.5        3.5
+    ##  7 "'Til There Was You"                      0.5        4  
+    ##  8 "'burbs, The"                             1.5        4.5
+    ##  9 "'night Mother"                           5          5  
+    ## 10 "(500) Days of Summer"                    0.5        5  
+    ## # ℹ 8,822 more rows
 
 ## Exercise 5: Scoped variants with `across()`
 
