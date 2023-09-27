@@ -107,9 +107,12 @@ Both `count()` and `tally()` can be grouped by multiple columns. Below, I want t
 
 ```{r}
 ### ERROR HERE ###
+# either one works fine
 movieLens %>%
-  group_by( title, rating) %>%
-  count(sort = TRUE)
+  count(title, rating, sort = TRUE)
+#movieLens %>%
+  #group_by( title, rating) %>%
+  #count(sort = TRUE)
 ```
 
 Not only do `count()` and `tally()` quickly allow you to count items within your dataset, `add_tally()` and `add_count()` are handy shortcuts that add an additional columns to your tibble, rather than collapsing each group.
