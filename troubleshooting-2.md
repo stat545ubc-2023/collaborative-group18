@@ -429,15 +429,31 @@ the missing values:
 ### ERROR HERE ###
 starWars %>%
   group_by(species) %>%
-  summarise(across("height", "mass", function(x) min(x, na.rm=TRUE)))
+  summarise(across(c("height", "mass"), function(x) min(x, na.rm=TRUE)))
 ```
 
-    ## Error in `summarise()`:
-    ## ℹ In argument: `across("height", "mass", function(x) min(x, na.rm =
-    ##   TRUE))`.
-    ## ℹ In group 1: `species = "Aleena"`.
-    ## Caused by error in `across()`:
-    ## ! `.fns` must be a function, a formula, or a list of functions/formulas.
+    ## Warning: There were 6 warnings in `summarise()`.
+    ## The first warning was:
+    ## ℹ In argument: `across(c("height", "mass"), function(x) min(x, na.rm = TRUE))`.
+    ## ℹ In group 4: `species = "Chagrian"`.
+    ## Caused by warning in `min()`:
+    ## ! no non-missing arguments to min; returning Inf
+    ## ℹ Run `dplyr::last_dplyr_warnings()` to see the 5 remaining warnings.
+
+    ## # A tibble: 38 × 3
+    ##    species   height  mass
+    ##    <chr>      <int> <dbl>
+    ##  1 Aleena        79    15
+    ##  2 Besalisk     198   102
+    ##  3 Cerean       198    82
+    ##  4 Chagrian     196   Inf
+    ##  5 Clawdite     168    55
+    ##  6 Droid         96    32
+    ##  7 Dug          112    40
+    ##  8 Ewok          88    20
+    ##  9 Geonosian    183    80
+    ## 10 Gungan       196    66
+    ## # ℹ 28 more rows
 
 Note that here R has taken the convention that the minimum value of a
 set of `NA`s is `Inf`.
@@ -455,22 +471,30 @@ Manually create a tibble with 4 columns:
 ``` r
 ### ERROR HERE ###
 fakeStarWars <- tribble(
-  ~name,            ~birth_weight,  ~birth_year, ~birth_location
-  "Luke Skywalker",  1.35      ,   1998        ,  Liverpool, England,
-  "C-3PO"         ,  1.80      ,   1999        ,  Liverpool, England,
-  "R2-D2"         ,  2.25      ,   2000        ,  Seattle, WA,
-  "Darth Vader"   ,  2.70      ,   2001        ,  Liverpool, England,
-  "Leia Organa"   ,  3.15      ,   2002        ,  New York, NY,
-  "Owen Lars"     ,  3.60      ,   2003        ,  Seattle, WA,
-  "Beru Whitesun Iars", 4.05   ,   2004        ,  Liverpool, England,
-  "R5-D4"         ,  4.50      ,   2005        ,  New York, NY,
+  ~name,            ~birth_weight,  ~birth_year, ~birth_location,
+  "Luke Skywalker",  1.35      ,   1998        ,  "Liverpool, England",
+  "C-3PO"         ,  1.80      ,   1999        ,  "Liverpool, England",
+  "R2-D2"         ,  2.25      ,   2000        ,  "Seattle, WA",
+  "Darth Vader"   ,  2.70      ,   2001        ,  "Liverpool, England",
+  "Leia Organa"   ,  3.15      ,   2002        ,  "New York, NY",
+  "Owen Lars"     ,  3.60      ,   2003        ,  "Seattle, WA",
+  "Beru Whitesun Iars", 4.05   ,   2004        ,  "Liverpool, England",
+  "R5-D4"         ,  4.50      ,   2005        ,  "New York, NY",
 )
+fakeStarWars
 ```
 
-    ## Error: <text>:4:3: unexpected string constant
-    ## 3:   ~name,            ~birth_weight,  ~birth_year, ~birth_location
-    ## 4:   "Luke Skywalker"
-    ##      ^
+    ## # A tibble: 8 × 4
+    ##   name               birth_weight birth_year birth_location    
+    ##   <chr>                     <dbl>      <dbl> <chr>             
+    ## 1 Luke Skywalker             1.35       1998 Liverpool, England
+    ## 2 C-3PO                      1.8        1999 Liverpool, England
+    ## 3 R2-D2                      2.25       2000 Seattle, WA       
+    ## 4 Darth Vader                2.7        2001 Liverpool, England
+    ## 5 Leia Organa                3.15       2002 New York, NY      
+    ## 6 Owen Lars                  3.6        2003 Seattle, WA       
+    ## 7 Beru Whitesun Iars         4.05       2004 Liverpool, England
+    ## 8 R5-D4                      4.5        2005 New York, NY
 
 ## Attributions
 
